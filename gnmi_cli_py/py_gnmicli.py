@@ -154,6 +154,7 @@ def _create_parser():
                       help='subscription mode [0=TARGET_DEFINED, 1=ON_CHANGE, 2=SAMPLE]')
   parser.add_argument('--update_count', default=0, type=int, help='Max number of streaming updates to receive. 0 means no limit.')
   parser.add_argument('--subscribe_mode', default=0, type=int, help='[0=STREAM, 1=ONCE, 2=POLL]')
+  parser.add_argument('--updates_only', default=False, type=bool)
   parser.add_argument('--encoding', default=0, type=int, help='[0=JSON, 1=BYTES, 2=PROTO, 3=ASCII, 4=JSON_IETF]')
   parser.add_argument('--qos', default=0, type=int, help='')
   parser.add_argument('--use_alias', action='store_true', help='use alias')
@@ -396,7 +397,8 @@ def gen_request(paths, opt, prefix):
         myqos = None
     mysblist = gnmi_pb2.SubscriptionList(prefix=myprefix, mode=opt['subscribe_mode'],
       allow_aggregation=opt['aggregate'], encoding=opt['encoding'],
-      subscription=mysubs, use_aliases=opt['use_alias'], qos=myqos)
+      subscription=mysubs, use_aliases=opt['use_alias'], qos=myqos,
+      updates_only=opt['updates_only'])
     mysubreq = gnmi_pb2.SubscribeRequest(subscribe=mysblist)
 
     print('Sending SubscribeRequest\n'+str(mysubreq))
